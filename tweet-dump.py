@@ -20,6 +20,7 @@ __version__ = '0.1'
 import argparse
 import urllib
 import sys
+import time
 
 from urllib2 import (Request, urlopen, HTTPError, URLError)
 
@@ -139,6 +140,11 @@ if __name__ == '__main__':
     while True:
         # get initial rate information
         (remaining, rst_time_s, rst_time) = get_initial_rate_info()
+        
+        out_file.write('<!DOCTYPE html>\n<html lang="en">\n\t<head>\n\t\t<meta charset="utf-8">\n')
+        out_file.write('\t\t<title>{screen_name} Tweet Dump</title>\n'.format( screen_name = screen_name ) )
+        out_file.write('\t\t<!--\n\t\t\t{title}\n\t\t\t\t{url}\n\t\t-->\n'.format( title='tweet-dump.py',url='https://github.com/pathawks/tweet-dump' ) )
+        out_file.write('\t</head>\n\t<body>\n')
 
         while remaining > 0:
             try:
@@ -151,14 +157,18 @@ if __name__ == '__main__':
                 requests_made += 1
                 if len(tweets) > 0:
                     for tweet in tweets:
+                        date_data = time.strptime( tweet["created_at"], "%a %b %d %H:%M:%S +0000 %Y" )
+                        date_data = time.strftime( "%Y-%m-%dT%H:%M:%S+00:00", date_data )
                         maxid = tweet["id"]
-                        out_file.write(u"%s    %s: %s\n" % (tweet["created_at"], maxid, repr(tweet["text"])))
                         tweet_count += 1
+                        out_file.write('\t\t<blockquote class="twitter-tweet"><p>{tweet_text}</p>&mdash; {user_name} (@{screen_name}) <a href="https://twitter.com/{user_id}/status/{id}" data-datetime="{date_data}">{date_string}</a></blockquote>\n'.format( tweet_text=repr(tweet["text"]), id=tweet["id"], screen_name=tweet["user"]["screen_name"], user_name=tweet["user"]["name"], user_id=tweet["user"]["id"], date_string=tweet["created_at"], date_data=date_data ) )
                 else:
                     print "[*] reached end of tweets"
                     break
 
         break
 
-    print "[*] %d tweets dumped!" % tweet_count
+        out_file.write('\t\t<script src="http://platform.twitter.com/widgets.js" charset="utf-8"></script>\n')
+        out_file.write('\t</body>\n</html>')
 
+    print "[*] %d tweets dumped!" % tweet_count
