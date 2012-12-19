@@ -208,7 +208,7 @@ if __name__ == '__main__':
     out_file.write('\n\t\t\t<p class="location-and-url">')
     out_file.write('\n\t\t\t\t<span class="location">{location}</span>'.format( location=twitter_user["location"] ) )
 
-    if ( twitter_user["url"] && twitter_user["location" ):
+    if ( twitter_user["url"] and twitter_user["location"] ):
         out_file.write(' &middot; ')
 
     out_file.write('\n\t\t\t\t<span class="url">')
