@@ -188,6 +188,7 @@ if __name__ == '__main__':
     out_file.write('}\n')
     out_file.write('\t\t\t#profile,blockquote{background:#fff;border:#DDD 1px solid;border-radius:5px;width:480px;margin:0 0 10px;padding:0 0 20px 20px;text-align:left}\n')
     out_file.write('\t\t\t#profile{color:#fff;background:#ccc;background:rgba(0,0,0,0.6);width:490px;text-align:center;padding:5px}\n')
+    out_file.write('\t\t\t#profile a{color:#fff}\n')
     out_file.write('\t\t\t.profile-picture{margin:20px auto 6px;border:#fff 4px solid;border-radius:4px;display:block;width:73px;height:73px}\n')
     out_file.write('\t\t\t.profile-picture .avatar{border-radius:3px}\n')
     out_file.write('\t\t\t.profile-card-inner h1{font-size:24px;text-shadow:rgba(0, 0, 0, 0.5) 0px 0.6px 0.6px}\n')
@@ -206,11 +207,15 @@ if __name__ == '__main__':
     out_file.write('\n\t\t\t<p class="bio ">{bio}</p>'.format( bio=twitter_user["description"] ) )
     out_file.write('\n\t\t\t<p class="location-and-url">')
     out_file.write('\n\t\t\t\t<span class="location">{location}</span>'.format( location=twitter_user["location"] ) )
+
+    if ( twitter_user["url"] && twitter_user["location" ):
+        out_file.write(' &middot; ')
+
     out_file.write('\n\t\t\t\t<span class="url">')
-    
+
     if twitter_user["url"]:
         out_file.write('\n\t\t\t\t\t<a href="{url}">{url}</a>'.format( url=twitter_user["url"] ) )
-    
+
     out_file.write('\n\t\t\t\t</span>')
     out_file.write('\n\t\t\t</p>')
     out_file.write('\n\t\t\t</div>')
