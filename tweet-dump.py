@@ -18,6 +18,7 @@ __author__ = 'Casey Dunham <casey.dunham@gmail.com>'
 __version__ = '0.1'
 
 import argparse
+import cgi
 import codecs
 import datetime
 import sys
@@ -86,7 +87,8 @@ def get_tweets(screen_name, count, maxid=None):
         "screen_name": screen_name,
         "count": count,
         "exclude_replies": "true",
-        "include_rts": "true"
+        "include_rts": "true",
+        "include_entities": "true"
     }
 
     # if we include the max_id from the last tweet we retrieved, we will retrieve the same tweet again
@@ -189,7 +191,7 @@ if __name__ == '__main__':
     out_file.write('\t\t\t#profile,blockquote{background:#fff;border:#DDD 1px solid;border-radius:5px;width:480px;margin:0 0 10px;padding:0 0 20px 20px;text-align:left}\n')
     out_file.write('\t\t\t#profile{color:#fff;background:#ccc;background:rgba(0,0,0,0.6);width:490px;text-align:center;padding:5px}\n')
     out_file.write('\t\t\t#profile a{color:#fff}\n')
-    out_file.write('\t\t\t.profile-picture{margin:20px auto 6px;border:#fff 4px solid;border-radius:4px;display:block;width:73px;height:73px}\n')
+    out_file.write('\t\t\t.profile-picture{margin:20px auto 6px;border:#fff 4px solid;border-radius:4px;display:block;width:73px;height:73px;background:#fff}\n')
     out_file.write('\t\t\t.profile-picture .avatar{border-radius:3px}\n')
     out_file.write('\t\t\t.profile-card-inner h1{font-size:24px;text-shadow:rgba(0, 0, 0, 0.5) 0px 0.6px 0.6px}\n')
     out_file.write('\t\t\t.profile-card-inner h2{font-size:18px;font-weight:normal}\n')
@@ -236,12 +238,24 @@ if __name__ == '__main__':
                 requests_made += 1
                 if len(tweets) > 0:
                     for tweet in tweets:
-                        date_data = time.strptime( tweet["created_at"], "%a %b %d %H:%M:%S +0000 %Y" )
-                        date_data = time.strftime( "%Y-%m-%dT%H:%M:%S+00:00", date_data )
+                        date_data     = time.strptime( tweet["created_at"], "%a %b %d %H:%M:%S +0000 %Y" )
+                        date_datetime = time.strftime( "%Y-%m-%dT%H:%M:%S+00:00", date_data )
+                        date_string   = time.strftime( "%I:%M %p - %d %b %y", date_data )
                         maxid = tweet["id"]
                         tweet_count += 1
-                        tweet["text"] = tweet["text"].encode('ascii', 'ignore')
-                        out_file.write('\t\t\t<blockquote class="twitter-tweet tw-align-center" width="500"><p>{tweet_text}</p>&mdash; {user_name} (@{screen_name}) <a href="https://twitter.com/{user_id}/status/{id}" data-datetime="{date_data}">{date_string}</a></blockquote>\n'.format( tweet_text=tweet["text"], id=tweet["id"], screen_name=tweet["user"]["screen_name"], user_name=tweet["user"]["name"], user_id=tweet["user"]["id"], date_string=tweet["created_at"], date_data=date_data ) )
+                        tweet["text"] = cgi.escape(tweet["text"]).encode('ascii', 'xmlcharrefreplace')
+
+                        if tweet.has_key('entities'):
+
+                            if tweet["entities"].has_key('urls'):
+    		                        for entity in tweet["entities"]["urls"]:
+			                            if entity.has_key('expanded_url') and entity.has_key('display_url') and entity.has_key('url'):
+			                                tweet["text"] = tweet["text"].replace( entity['url'], '<a href="{0}">{1}</a>'.format( cgi.escape(entity['expanded_url'] ).encode('ascii', 'xmlcharrefreplace'), cgi.escape(entity['display_url'] ).encode('ascii', 'xmlcharrefreplace') ) )
+                            else:
+			                          r = re.compile(r"(http://[^ ]+)")
+			                          tweet["text"] = r.sub(r'<a href="\1">\1</a>', tweet["text"])
+
+                        out_file.write('\t\t\t<blockquote class="twitter-tweet tw-align-center" width="500"><p>{tweet_text}</p>&mdash; {user_name} (@{screen_name}) <a href="https://twitter.com/{screen_name}/status/{id}" data-datetime="{date_datetime}">{date_string}</a></blockquote>\n'.format( tweet_text=tweet["text"], id=tweet["id"], screen_name=tweet["user"]["screen_name"], user_name=tweet["user"]["name"], user_id=tweet["user"]["id"], date_string=date_string, date_datetime=date_datetime ) )
                 else:
                     print "[*] reached end of tweets"
                     break
