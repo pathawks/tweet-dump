@@ -14,8 +14,8 @@ OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHE
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
-__author__ = 'Casey Dunham <casey.dunham@gmail.com>'
-__version__ = '0.1'
+__author__ = 'Pat Hawks <pat@pathawks.com>'
+__version__ = '0.2'
 
 import argparse
 import cgi
