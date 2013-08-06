@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
 """
 Copyright (c) 2012 Casey Dunham <casey.dunham@gmail.com>
 
