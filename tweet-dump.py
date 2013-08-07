@@ -74,9 +74,11 @@ def print_banner():
     \  (   \/ .
      `._`.__\\ o ,
         <<  `'   .o..
+
     """
 
 def Usage():
+	print_banner()
   print 'Usage: %s [options] twitterid' % __file__
   print
   print '  This script fetches a users latest twitter update and stores'
