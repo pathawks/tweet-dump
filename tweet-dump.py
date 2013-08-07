@@ -6,6 +6,7 @@
 __author__ = 'Pat Hawks <pat@pathawks.com>'
 __version__ = '0.2'
 
+import cgi
 import codecs
 import getopt
 import sys
@@ -167,10 +168,15 @@ def UserSignIn():
 
 def FetchTwitter(user, output):
 	assert user
-	statuses = twitter.Api().GetUserTimeline(id=user, count=1)
+	statuses = twitter.Api(
+			consumer_key=keyring.get_password(__file__, 'oauth_consumer'),
+			consumer_secret=keyring.get_password(__file__, 'oauth_consumer_secret'),
+			access_token_key=keyring.get_password(__file__, 'oauth_token'),
+			access_token_secret=keyring.get_password(__file__, 'oauth_token_secret')
+		).GetUserTimeline(user, 1)
 	s = statuses[0]
 	xhtml = TWEET_TEMPLATE.format(
-		tweet_text = s.text,
+		tweet_text = cgi.escape(s.text).encode('ascii', 'xmlcharrefreplace'),
 		user_name = s.user.name,
 		screen_name = s.user.screen_name,
 		id = s.id,
