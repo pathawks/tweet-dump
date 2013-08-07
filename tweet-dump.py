@@ -11,6 +11,7 @@ import getopt
 import sys
 import twitter
 import keyring
+import webbrowser
 
 TWEET_TEMPLATE = """
 			<blockquote class="twitter-tweet tw-align-center" width="500"><p>{tweet_text}</p>&mdash; {user_name} (@{screen_name}) <a href="https://twitter.com/{screen_name}/status/{id}" data-datetime="{date_datetime}">{date_string}</a></blockquote>
@@ -144,11 +145,20 @@ def get_access_token(consumer_key, consumer_secret):
 			print 'Your Twitter Access Token key: %s' % access_token['oauth_token']
 			print '          Access Token secret: %s' % access_token['oauth_token_secret']
 			print ''
+			keyring.set_password(__file__, 'oauth_consumer', consumer_key)
+			keyring.set_password(__file__, 'oauth_consumer_secret', consumer_secret)
+			keyring.set_password(__file__, 'oauth_token', access_token['oauth_token'])
+			keyring.set_password(__file__, 'oauth_token_secret', access_token['oauth_token_secret'])
 
 
 def UserSignIn():
 	print_banner()
 	print 'Before you can use %s, you must sign in with Twitter' % __file__
+	print
+	print 'Setup a new Twitter Application at https://dev.twitter.com/apps/new'
+	print 'Then provide your applications details below'
+	print
+	webbrowser.open('https://dev.twitter.com/apps/new')
 	consumer_key = raw_input('Enter your consumer key: ')
 	consumer_secret = raw_input("Enter your consumer secret: ")
 	get_access_token(consumer_key, consumer_secret)
@@ -200,4 +210,7 @@ def main():
 	FetchTwitter(user, output)
 
 if __name__ == "__main__":
-	main()
+	if keyring.get_password(__file__, 'oauth_consumer'):
+		main()
+	else:
+		UserSignIn()
