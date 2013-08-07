@@ -76,6 +76,7 @@ def Usage():
         <<  `'   .o..
 
     """
+
   print 'Usage: %s [options] twitterid' % __file__
   print
   print '  This script fetches a users latest twitter update and stores'
