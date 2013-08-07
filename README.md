@@ -1,4 +1,12 @@
 # Tweet Dump
+```
+     .-.
+    (. .)__,')
+    / V      )
+    \  (   \/ .
+     `._`.__\\ o ,
+        <<  `'   .o..
+```
 
 **Dump a Twitter timeline to an HTML file**
 
