@@ -74,7 +74,6 @@ def Usage():
     \  (   \/ .
      `._`.__\\ o ,
         <<  `'   .o..
-
     """
 
   print 'Usage: %s [options] twitterid' % __file__
