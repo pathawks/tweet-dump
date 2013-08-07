@@ -67,15 +67,15 @@ HTML_TEMPLATE = """
 """
 
 def Usage():
-    print "tweet-dump %s ©2013 %s" % (__version__, __author__)
-    print """     .-.
+	print "tweet-dump %s ©2013 %s" % (__version__, __author__)
+	print """     .-.
     (. .)__,')
     / V      )
     \  (   \/ .
      `._`.__\\ o ,
         <<  `'   .o..
 
-    """
+	"""
   print 'Usage: %s [options] twitterid' % __file__
   print
   print '  This script fetches a users latest twitter update and stores'
