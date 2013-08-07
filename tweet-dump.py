@@ -66,14 +66,6 @@ HTML_TEMPLATE = """
 </html>
 """
 
-TEMPLATE = """
-<div class="twitter">
-  <span class="twitter-user"><a href="http://twitter.com/%s">Twitter</a>: </span>
-  <span class="twitter-text">%s</span>
-  <span class="twitter-relative-created-at"><a href="http://twitter.com/%s/statuses/%s">Posted %s</a></span>
-</div>
-"""
-
 def print_banner():
     print "tweet-dump %s ©2013 %s" % (__version__, __author__)
     print """     .-.
@@ -99,7 +91,14 @@ def FetchTwitter(user, output):
   assert user
   statuses = twitter.Api().GetUserTimeline(id=user, count=1)
   s = statuses[0]
-  xhtml = TEMPLATE % (s.user.screen_name, s.text, s.user.screen_name, s.id, s.relative_created_at)
+  xhtml = TWEET_TEMPLATE.format(
+		tweet_text = s.text,
+		user_name = s.user.name,
+		screen_name = s.user.screen_name,
+		id = s.id,
+		date_datetime = s.created_at_in_seconds,
+		date_string = s.relative_created_at
+  )
   if output:
     Save(xhtml, output)
   else:
