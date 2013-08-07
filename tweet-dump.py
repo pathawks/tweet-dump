@@ -11,6 +11,61 @@ import getopt
 import sys
 import twitter
 
+TWEET_TEMPLATE = """
+			<blockquote class="twitter-tweet tw-align-center" width="500"><p>{tweet_text}</p>&mdash; {user_name} (@{screen_name}) <a href="https://twitter.com/{screen_name}/status/{id}" data-datetime="{date_datetime}">{date_string}</a></blockquote>
+"""
+
+HTML_TEMPLATE = """
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<!--
+			tweet-dump.py
+			https://github.com/pathawks/tweet-dump
+			Backup Date: {current_time}
+		-->
+		<title>{name} (@{screen_name})</title>
+		<base href="http://twitter.com/">
+		<link rel="icon" href="{url}" type="image/png"/>
+		<style>
+			body{text-align:center;color:#{color};padding:0;margin:0;font-family:"Helvetica Neue", Arial, sans-serif;font-size:14px;background:#{bg};background-attachment:fixed}
+			a{color:#{color}}
+			#container{margin:0 auto;width:500px;background:rgba(255,255,255,0.3);padding:8px 14px' )}
+			#profile,blockquote{background:#fff;border:#DDD 1px solid;border-radius:5px;width:480px;margin:0 0 10px;padding:0 0 20px 20px;text-align:left}
+			#profile{color:#fff;background:#ccc;background:rgba(0,0,0,0.6);width:490px;text-align:center;padding:5px}
+			#profile a{color:#fff}
+			.profile-picture{margin:20px auto 6px;border:#fff 4px solid;border-radius:4px;display:block;width:73px;height:73px;background:#fff}
+			.profile-picture .avatar{border-radius:3px}
+			.profile-card-inner h1{font-size:24px;text-shadow:rgba(0, 0, 0, 0.5) 0px 0.6px 0.6px}
+			.profile-card-inner h2{font-size:18px;font-weight:normal}
+		</style>
+	</head>
+	<body>
+		<div id="container">
+			<div id="profile">
+				<a href="{avatar}" class="profile-picture">
+					<img src="{avatar}" alt="{name}" class="avatar">
+				</a>
+				<div class="profile-card-inner">
+				<h1 class="fullname">{name}</h1>
+				<h2 class="username"><span class="screen-name">@{screen_name}</span></h2>
+				<p class="bio ">{bio}</p>
+				<p class="location-and-url">
+					<span class="location">{location}</span> &middot; 
+					<span class="url">
+						<a href="{url}">{url}</a>
+					</span>
+				</p>
+				</div>
+			</div>
+			{timeline}
+		</div>
+		<script src="http://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</body>
+</html>
+"""
+
 TEMPLATE = """
 <div class="twitter">
   <span class="twitter-user"><a href="http://twitter.com/%s">Twitter</a>: </span>
