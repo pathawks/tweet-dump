@@ -11,8 +11,9 @@ Author: Pat Hawks <pat@pathawks.com>
 ## License
 
 ```
-Copyright 2013 Pat Hawks
+Copyright 2013 Pat Hawks <pat@pathawks.com>
 Portions Copyright 2007-2013 The Python-Twitter Developers
+Portions Copyright 2012 Casey Dunham <casey.dunham@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the 'License');
 you may not use this file except in compliance with the License.
