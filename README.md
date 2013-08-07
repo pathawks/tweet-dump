@@ -14,7 +14,7 @@ Author: Pat Hawks <pat@pathawks.com>
 
 ## Dependencies
  * [Python Twitter](https://github.com/bear/python-twitter)
- * [keychain.py](https://github.com/spjwebster/keychain.py)
+ * [keyring](https://pypi.python.org/pypi/keyring)
 
 ## License
 

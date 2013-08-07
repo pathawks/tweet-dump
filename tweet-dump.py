@@ -10,6 +10,7 @@ import codecs
 import getopt
 import sys
 import twitter
+import keyring
 
 TWEET_TEMPLATE = """
 			<blockquote class="twitter-tweet tw-align-center" width="500"><p>{tweet_text}</p>&mdash; {user_name} (@{screen_name}) <a href="https://twitter.com/{screen_name}/status/{id}" data-datetime="{date_datetime}">{date_string}</a></blockquote>
