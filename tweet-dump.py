@@ -67,18 +67,17 @@ HTML_TEMPLATE = """
 """
 
 def print_banner():
-    print "tweet-dump %s ©2013 %s" % (__version__, __author__)
-    print """     .-.
+  print "tweet-dump %s ©2013 %s" % (__version__, __author__)
+  print """     .-.
     (. .)__,')
     / V      )
     \  (   \/ .
      `._`.__\\ o ,
         <<  `'   .o..
-
-    """
+	"""
 
 def Usage():
-	print_banner()
+  print_banner()
   print 'Usage: %s [options] twitterid' % __file__
   print
   print '  This script fetches a users latest twitter update and stores'
