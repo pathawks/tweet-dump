@@ -68,13 +68,13 @@ HTML_TEMPLATE = """
 """
 
 def print_banner():
+	print "tweet-dump %s ©2013 %s" % (__version__, __author__)
+	print """     .-.
     (. .)__,')
     / V      )
     \  (   \/ .
      `._`.__\\ o ,
         <<  `'   .o..
-	print "tweet-dump %s ©2013 %s" % (__version__, __author__)
-	print """     .-.
 	"""
 
 def Usage():
