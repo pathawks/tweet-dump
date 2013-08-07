@@ -20,7 +20,7 @@ TEMPLATE = """
 """
 
 def print_banner():
-    print "tweet-dump %s (c) 2012 %s" % (__version__, __author__)
+    print "tweet-dump %s ©2013 %s" % (__version__, __author__)
     print """     .-.
     (. .)__,')
     / V      )
