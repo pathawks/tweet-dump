@@ -87,8 +87,9 @@ def Usage():
 	print '  the result in a file as an XHTML fragment'
 	print
 	print '  Options:'
-	print '    --help -h : print this help'
-	print '    --output : the output file [default: stdout]'
+	print '    -h, --help        print this help'
+	print '    -o, --output      the output file [default: stdout]'
+	print '    -n, --number      the number of Tweets to retrieve [default: 1]'
 
 
 def get_access_token(consumer_key, consumer_secret):
@@ -166,27 +167,27 @@ def UserSignIn():
 
 
 
-def FetchTwitter(user, output):
+def FetchTwitter(user, output, number):
 	assert user
 	statuses = twitter.Api(
 			consumer_key=keyring.get_password(__file__, 'oauth_consumer'),
 			consumer_secret=keyring.get_password(__file__, 'oauth_consumer_secret'),
 			access_token_key=keyring.get_password(__file__, 'oauth_token'),
 			access_token_secret=keyring.get_password(__file__, 'oauth_token_secret')
-		).GetUserTimeline(user, 1)
-	s = statuses[0]
-	xhtml = TWEET_TEMPLATE.format(
-		tweet_text = cgi.escape(s.text).encode('ascii', 'xmlcharrefreplace'),
-		user_name = s.user.name,
-		screen_name = s.user.screen_name,
-		id = s.id,
-		date_datetime = s.created_at_in_seconds,
-		date_string = s.relative_created_at
-	)
-	if output:
-		Save(xhtml, output)
-	else:
-		print xhtml
+		).GetUserTimeline(screen_name=user, count=number)
+	for s in statuses:
+		xhtml = TWEET_TEMPLATE.format(
+			tweet_text = cgi.escape(s.text).encode('ascii', 'xmlcharrefreplace'),
+			user_name = s.user.name,
+			screen_name = s.user.screen_name,
+			id = s.id,
+			date_datetime = s.created_at_in_seconds,
+			date_string = s.relative_created_at
+		)
+		if output:
+			Save(xhtml, output)
+		else:
+			print xhtml
 
 
 def Save(xhtml, output):
@@ -197,7 +198,7 @@ def Save(xhtml, output):
 
 def main():
 	try:
-		opts, args = getopt.gnu_getopt(sys.argv[1:], 'ho', ['help', 'output='])
+		opts, args = getopt.gnu_getopt(sys.argv[1:], 'hon', ['help', 'output=', 'number='])
 	except getopt.GetoptError:
 		Usage()
 		sys.exit(2)
@@ -207,13 +208,16 @@ def main():
 		Usage()
 		sys.exit(2)
 	output = None
+	number = 1
 	for o, a in opts:
 		if o in ("-h", "--help"):
 			Usage()
 			sys.exit(2)
 		if o in ("-o", "--output"):
 			output = a
-	FetchTwitter(user, output)
+		if o in ("-n", "--number"):
+			number = a
+	FetchTwitter(user, output, number)
 
 if __name__ == "__main__":
 	if keyring.get_password(__file__, 'oauth_consumer'):
